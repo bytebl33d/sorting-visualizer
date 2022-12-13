@@ -15,7 +15,7 @@ public:
     int selectionSort(int iteration);
     int insertionSort(int iteration);
 
-    bool visualizing = true;
+    bool visualizing = false;
 
 private:
     std::vector<int>& _vector;

@@ -13,9 +13,11 @@ public:
     inline bool isClosed() const { return closed;}
     bool closed = false;
 
+    void clear();
+
     void visualizeSort(std::vector<int>& vector, unsigned int red, unsigned int blue, unsigned int size);
 
-    SDL_Renderer *renderer;
+    static SDL_Renderer *renderer;
 
 private:
     bool init();

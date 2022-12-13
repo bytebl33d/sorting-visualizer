@@ -1,4 +1,7 @@
 #include <window.h>
+#include <SDL2/SDL_ttf.h>
+
+SDL_Renderer *Window::renderer = nullptr;
 
 Window::Window(const std::string &title, int width, int height) : 
     _title(title), _width(width), _height(height)
@@ -9,6 +12,7 @@ Window::Window(const std::string &title, int width, int height) :
 Window::~Window(){
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(_window);
+    TTF_Quit();
     SDL_Quit();
 }
 
@@ -16,6 +20,10 @@ bool Window::init(){
     if (SDL_Init(SDL_INIT_VIDEO) != 0){
         std::cerr << "Failed to initialize SDL\n";
         return 0;
+    }
+
+    if (TTF_Init() == -1) {
+        std::cerr << "Failed to initialize SDL_ttf\n";
     }
 
     _window = SDL_CreateWindow(
@@ -40,6 +48,12 @@ bool Window::init(){
     }
 
     return true;
+}
+
+void Window::clear() {
+    SDL_SetRenderDrawColor(renderer, 0,0,0,255);
+    SDL_RenderClear(renderer);
+    SDL_RenderSetScale(renderer, 1, 1);
 }
 
 void Window::visualizeSort(std::vector<int>& vector, unsigned int red, unsigned int blue, unsigned int size){

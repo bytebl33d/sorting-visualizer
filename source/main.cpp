@@ -12,7 +12,6 @@ std::vector<int> randomizeVector(){
     std::uniform_int_distribution<> d(1,99);
     std::vector<int> v;
 
-    // populate vector with numbers
     for(int i= 0; i < size; i++)
     {
         v.push_back(d(rd));
@@ -21,37 +20,54 @@ std::vector<int> randomizeVector(){
 }
 
 int main(int argc, char **argv) {
-
-    std::cout
-        <<"Available Controls inside Sorting Visualizer:-\n"
-        <<"    Use 0 to resort the array.\n"
-        <<"    Use 1 to start Bubble Sort Algorithm.\n"
-        <<"    Use 2 to start Selection Sort Algorithm.\n"
-        <<"    Use 3 to start Insertion Sort Algorithm.\n"
-        <<"    Use q to exit out of Sorting Visualizer\n\n";
-
-    Window window("Sorting visualizer", size*10, 1000);
-    SDL_Event e;
     std::vector<int> vector = randomizeVector();
+
+    int window_width = size*10;
+    int window_height = 1000;
+    int text_x = 200;
+    int text_y = 300;
+
+    Window window("Sorting visualizer", window_width, window_height);
     Sort sorter(window, vector);
+    Text text(Window::renderer, "fonts/kongtext.ttf", 50, "Sorting Visualizer 1.0", {255,255,255});
+    Text options1(Window::renderer, "fonts/kongtext.ttf", 25, "0: re-shuffle array", {255,255,255});
+    Text options2(Window::renderer, "fonts/kongtext.ttf", 25, "1-3: run/pause selected algorithm", {255,255,255});
+    Text options3(Window::renderer, "fonts/kongtext.ttf", 25, "m: open/close menu", {255,255,255});
+    Text options4(Window::renderer, "fonts/kongtext.ttf", 25, "q: quit program", {255,255,255});
 
     int iteration = 0;
     int selected = 0;
-
+    bool idle = true;
+    SDL_Event e;
     while(!window.isClosed())
     {
+       
+        if (idle){
+            window.clear();
+            text.display(text_x,text_y, Window::renderer);
+            options1.display(text_x,text_y+200, Window::renderer);
+            options2.display(text_x,text_y+250, Window::renderer);
+            options3.display(text_x,text_y+300, Window::renderer);
+            options4.display(text_x,text_y+350, Window::renderer);
+            SDL_RenderPresent(Window::renderer);
+        }
+
         while(SDL_PollEvent(&e)!=0)
         {
             if(e.type==SDL_QUIT){
-                std::cout<<"\nEXITING PROGRAM.\n";
+                std::cout<<"\nGoodbye...\n";
                 window.closed = true;
             }  
             if(e.type==SDL_KEYDOWN){
                 switch (e.key.keysym.sym)
                 {
                     case SDLK_q:
-                        std::cout<<"\nEXITING PROGRAM.\n";
+                        std::cout<<"\nGoodbye...\n";
                         window.closed = true;
+                        break;
+
+                    case SDLK_m:
+                        if (sorter.visualizing) idle = !idle;
                         break;
 
                     case SDLK_0:
@@ -61,16 +77,19 @@ int main(int argc, char **argv) {
 
                     case SDLK_1:
                         selected = 1;
+                        idle = false;
                         sorter.visualizing = !sorter.visualizing;
                         break;
 
                     case SDLK_2:
                         selected = 2;
+                        idle = false;
                         sorter.visualizing = !sorter.visualizing;
                         break;
 
                     case SDLK_3:
                         selected = 3;
+                        idle = false;
                         sorter.visualizing = !sorter.visualizing;
                         break;
                     
@@ -81,7 +100,7 @@ int main(int argc, char **argv) {
             }
         }
 
-        if (sorter.visualizing){
+        if (sorter.visualizing && !idle){
             switch (selected)
             {
                 case 1:
@@ -98,6 +117,8 @@ int main(int argc, char **argv) {
                     break;
             }
         }
+
+        SDL_Delay(1);
     }
     return 0;
 }
