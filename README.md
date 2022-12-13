@@ -7,5 +7,5 @@ sudo apt-get install libsdl2-dev
 
 ## Compiling
 ```
-g++ sort.cpp -o sort -lSDL2
+g++ source/* -o sort.out -lSDL2 -lSDL2_ttf -Iheaders
 ```
