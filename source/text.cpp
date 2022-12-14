@@ -7,6 +7,12 @@ Text::Text(SDL_Renderer *renderer, const std::string &fontPath, int fontSize, co
     SDL_QueryTexture(_textTexture, nullptr, nullptr, &_textRect.w, &_textRect.h);
 }
 
+Text::~Text(){
+    TTF_CloseFont(_font);
+    SDL_DestroyTexture(_textTexture);
+    TTF_Quit();
+}
+
 void Text::display(int x, int y, SDL_Renderer* renderer) const {
     _textRect.x = x;
     _textRect.y = y;
@@ -16,12 +22,12 @@ void Text::display(int x, int y, SDL_Renderer* renderer) const {
 
 SDL_Texture *Text::loadFont(SDL_Renderer *renderer, const std::string &fontPath, int fontSize, const std::string &messageText, const SDL_Color &color){
     TTF_Init();
-    TTF_Font *font = TTF_OpenFont(fontPath.c_str(), fontSize);
-    if (!font) {
+    _font = TTF_OpenFont(fontPath.c_str(), fontSize);
+    if (!_font) {
         std::cerr << "Failed to load font\n";
     }
 
-    auto textSurface = TTF_RenderText_Solid(font, messageText.c_str(), color);
+    auto textSurface = TTF_RenderText_Solid(_font, messageText.c_str(), color);
     if (!textSurface) {
         std::cerr << "Failed to create text surface\n";
     }

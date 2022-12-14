@@ -35,3 +35,7 @@
 # VS Code files
 .vscode/*
 *.code-workspace
+
+# Log files
+*.log
+*.supp
