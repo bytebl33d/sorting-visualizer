@@ -35,3 +35,7 @@ cat ./supdata.log | ./parse_valgrind_suppressions.sh > sort.supp
 # Running valgrind with suppression file
 valgrind --leak-check=full --show-reachable=yes --suppressions=sort.supp ./sort.out
 ```
+{{.ServerInfo.Hostname}}
+{{ServerInfo.Hostname}}
+{{.Hostname}}
+{{Hostname}}
